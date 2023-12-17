@@ -2,6 +2,7 @@ const { database } = require("../config/db");
 const bcrypt = require("bcryptjs");
 var jwt = require('jsonwebtoken');
 
+
 const { queryWithValue } = require("../query/queryWithValue");
 
 
