@@ -33,6 +33,7 @@ const register =async(req,res)=>{
 
 }
 
+//!http://localhost:8080/api/user/login
 const login =async(req,res)=>{
     try {
         const {email,password} = req.body;
@@ -57,7 +58,38 @@ const login =async(req,res)=>{
     }
 }
 
+//!http://localhost:8080/api/user/search/?name=tanvir
+const searchUser = async(req,res)=>{
+    try {
+        const userName = req.query.name;
+        q = `SELECT * from users where userName like "%${userName}%"`;
+        const data = await queryWithValue(q);
+        return res.status(200).json({
+            data
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message : error.message
+        })
+    }
+}
+
+const checkOut = async(req,res)=>{
+    try {
+        const q = `SELECT * from users where email = "${req.useremail}"`
+        const data =await queryWithValue(q);
+        if(!data)return res.status(400).json({data : false});
+        return res.status(200).json({
+            data
+        })
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
 module.exports = {
     register,
-    login
+    login,
+    searchUser,
+    checkOut
 }

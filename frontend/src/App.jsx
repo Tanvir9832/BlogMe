@@ -11,6 +11,12 @@ import Single from "./pages/Single";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Write from "./pages/Write";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from "react";
+import axiosInstance from "./service/axios";
+import { authorization } from "./utils/authorization";
+import { UserContext } from "./context/authContext";
 
 function Layout() {
   return (
@@ -52,10 +58,27 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const { setUser } = UserContext();
+  const checkout =async()=>{
+    try {
+      const res = await axiosInstance.get("/api/user/checkOut",authorization);
+      setUser(res?.data?.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+useEffect(()=>{
+     if(localStorage.getItem("blogME")){
+      console.log("first");
+      checkout();
+     }
+  },[])
   return (
     <div className="flex justify-center">
-      <div className="lg:w-[1024px] mx-8">
+      <div className="lg:w-[1524px] mx-8">
         <RouterProvider router={router} />
+        <ToastContainer />
       </div>
     </div>
   );
